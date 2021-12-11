@@ -1,66 +1,66 @@
-import React, { useState } from "react";
-import { loginUser } from "./LoginUser";
+import React, { useState, useContext } from "react";
+import { LoginUser } from "./LoginUser";
+import { AppContext } from "../Context/ApplicationContextProvider";
 
 const Login = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [isToken, setToken] = React.useState("");
-  const [isAuth, setIsAuth] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  // const [isAuth, setIsAuth] = useState(false);
+  const [isToken, setIsToken] = useState("");
+
+  const [isAuth, setIsAuth] = useContext(AppContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
     setIsError(false);
 
-    loginUser({ email, password })
+    LoginUser({ email, password })
       .then((res) => {
         setIsAuth(true);
-        setToken(res.data.token);
+        setIsToken(res.data.token);
       })
       .catch((err) => {
-        console.log(err);
-        console.log(2);
+        console.log("Error is ", err);
         setIsError(true);
       })
       .finally(() => {
-        console.log(4);
         setIsLoading(false);
       });
-    // console.log(3)
   };
 
   if (isAuth) {
-    console.log("Vxc");
     return (
       <div>
-        <h1>Welcome to the dashboard</h1>
-        <h1> Token is {isToken}</h1>
+        <p>We are a user oriented website</p>
+        <p>Your token to Access the site is : {isToken} </p>
       </div>
     );
   }
+
   return (
     <form onSubmit={handleSubmit}>
-      {/* {isError && "something is wrong"} */}
       <div>
         <label>
           email :{" "}
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="email"
+            placeholder="...Enter Email"
           />
         </label>
       </div>
       <br />
+
       <div>
         <label>
-          password :{" "}
+          Password :{" "}
           <input
             type="password"
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="password"
+            placeholder="...Enter password"
           />
         </label>
       </div>
@@ -71,4 +71,5 @@ const Login = () => {
     </form>
   );
 };
+
 export { Login };

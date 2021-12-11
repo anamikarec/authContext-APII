@@ -1,9 +1,14 @@
 import axios from "axios";
 
-function loginUser({ email, password }) {
-  if (!email || !password) {
-    return Promise.reject("email or Password is missing");
+const LoginUser = ({ email, password }) => {
+  if (!email && !password) {
+    return Promise.reject("Please enter Email and Password");
+  } else if (!email) {
+    return Promise.reject("Please enter the Email");
+  } else if (!password) {
+    return Promise.reject("PLease enter the Password");
   }
+
   const config = {
     method: "post",
     data: {
@@ -14,6 +19,6 @@ function loginUser({ email, password }) {
   };
   console.log(email, password);
   return axios(config);
-}
+};
 
-export { loginUser };
+export { LoginUser };
